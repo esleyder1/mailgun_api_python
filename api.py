@@ -49,7 +49,7 @@ def read_documents():
     df_seleccionados = archivo_excel[columnas]
 
     rows = []
-    for data in enumerate(df_seleccionados):
+    for data in df_seleccionados:
         row = ''.join(map(str, archivo_excel[data].values))
  
         rows.append(row)  
@@ -63,7 +63,7 @@ def read_documents():
         remainingDays = diff.days
         print(remainingDays)
         if(remainingDays == 8):
-            print("faltan 8 días, se enviará el correo")
+            print(f"faltan {remainingDays} días, se enviará el correo")
             
             rows[0] = fecha.strftime("%m/%d/%Y")
             
@@ -78,7 +78,7 @@ def read_documents():
         else:
             print("hoy no se enviará un correo")
 
-schedule.every().day.at("15:10").do(read_documents)
+schedule.every().day.at("15:40").do(read_documents)
 
 while True:
     schedule.run_pending()
