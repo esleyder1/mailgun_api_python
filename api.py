@@ -78,7 +78,7 @@ def read_documents():
         else:
             print("hoy no se enviará un correo")
 
-schedule.every().day.at("14:19").do(read_documents)
+schedule.every().day.at("15:10").do(read_documents)
 
 while True:
     schedule.run_pending()
