@@ -7,8 +7,16 @@ import pandas as pd
 from jinja2 import Template
 import schedule
 import time
+import urllib.request
 
 load_dotenv()
+
+def connect(host='http://google.com'):
+    try:
+        urllib.request.urlopen(host)
+        return True
+    except:
+        return False
 
 def getTime():
     msgTime = "Buenos días"
@@ -75,7 +83,6 @@ def read_documents():
         today = datetime.date.today()
         diff = fecha - today
         remainingDays = diff.days
-        print(remainingDays)
         if(remainingDays == 8 or remainingDays == 7):
             print(f"faltan {remainingDays} días, se enviará el correo")
             
@@ -83,7 +90,7 @@ def read_documents():
             
             data = {
                 "fecha": rows[0],
-                "nombre": rows[1],
+                "nombre": rows[1].capitalize(),
                 "correo": rows[2],
                 "motivo": rows[3]
             }
@@ -96,7 +103,7 @@ def main():
 
     print("Iniciando...")
 
-    scheduledTime = "08:21:00"
+    scheduledTime = "09:45:00"
 
     schedule.every().day.at(scheduledTime).do(read_documents)
 
@@ -107,12 +114,18 @@ def main():
     if(currentTime <= scheduledTime):
         print("El servicio se ejecutará a las:", scheduledTime)
 
-    while True:
     
-        schedule.run_pending()
+
+
+while True:
         
-        time.sleep(60)		 	
+        if(connect()):
+            print("Hay internet")
+            main()
+            schedule.run_pending()
+        else:
+            print("No hay internet")    
+        time.sleep(60)	 	
 
 
-main()
 
