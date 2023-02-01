@@ -5,6 +5,8 @@ import datetime
 from dateutil.parser import parse
 import pandas as pd
 from jinja2 import Template
+import schedule
+import time
 
 load_dotenv()
 
@@ -33,8 +35,6 @@ def send_email(data):
         else:
             print("Hubo un error al enviar el correo")
 
-
-#pip install -r requirements.txt --use-pep517 --user
 def validate(date_text):
         try:
             datetime.date.fromisoformat(date_text)
@@ -47,10 +47,9 @@ def read_documents():
     format = "%d-%m-%Y"
     columnas = ['fecha','nombre','correo','motivo']
     df_seleccionados = archivo_excel[columnas]
-    #print(df_seleccionados)
 
     rows = []
-    for index, data in enumerate(df_seleccionados):
+    for data in enumerate(df_seleccionados):
         row = ''.join(map(str, archivo_excel[data].values))
  
         rows.append(row)  
@@ -78,8 +77,11 @@ def read_documents():
             send_email(data)
         else:
             print("hoy no se enviará un correo")
-                
-    #print(''.join(map(str, rows)))
-read_documents()			
+
+schedule.every().day.at("14:19").do(read_documents)
+
+while True:
+    schedule.run_pending()
+    time.sleep(60) # wait one minute			
 
 
