@@ -5,5 +5,3 @@ python_dateutil==2.8.2
 requests==2.28.2
 schedule==1.1.0
 
-#create or replace requirements.txt
-#python -m  pipreqs.pipreqs . --force
