@@ -11,6 +11,8 @@ import urllib.request
 
 load_dotenv()
 
+errorApi = False
+
 def connect(host='http://google.com'):
     try:
         urllib.request.urlopen(host)
@@ -57,55 +59,89 @@ def send_email(data):
         else:
             print("Hubo un error al enviar el correo")
 
-def validate(date_text):
+def send_email_error():
+
+    recipient_list = ["megaesleyder@gmail.com"]
+
+    t = Template("""<html xmlns="http://www.w3.org/1999/xhtml"> <head> <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <meta name="viewport" content="width=device-width" /> <title>Error al iniciar el servicio</title> </head> <body style=" -moz-box-sizing: border-box; -ms-text-size-adjust: 100%; -webkit-box-sizing: border-box; -webkit-text-size-adjust: 100%; margin: 0; box-sizing: border-box; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.3; margin: 0; min-width: 100%; padding: 0; text-align: left; width: 100% !important; " > <style> @media only screen { html { min-height: 100%; background: #f3f3f3; } } @media only screen and (max-width: 596px) { .small-float-center { margin: 0 auto !important; float: none !important; text-align: center !important; } .small-text-center { text-align: center !important; } .small-text-left { text-align: left !important; } .small-text-right { text-align: right !important; } } @media only screen and (max-width: 596px) { .hide-for-large { display: block !important; width: auto !important; overflow: visible !important; max-height: none !important; font-size: inherit !important; line-height: inherit !important; } } @media only screen and (max-width: 596px) { table.body table.container .hide-for-large, table.body table.container .row.hide-for-large { display: table !important; width: 100% !important; } } @media only screen and (max-width: 596px) { table.body table.container .callout-inner.hide-for-large { display: table-cell !important; width: 100% !important; } } @media only screen and (max-width: 596px) { table.body table.container .show-for-large { display: none !important; width: 0; mso-hide: all; overflow: hidden; } } @media only screen and (max-width: 596px) { table.body img { width: auto; height: auto; } table.body center { min-width: 0 !important; } table.body .container { width: 95% !important; } table.body .column, table.body .columns { height: auto !important; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; padding-left: 16px !important; padding-right: 16px !important; } table.body .column .column, table.body .column .columns, table.body .columns .column, table.body .columns .columns { padding-left: 0 !important; padding-right: 0 !important; } table.body .collapse .column, table.body .collapse .columns { padding-left: 0 !important; padding-right: 0 !important; } td.small-1, th.small-1 { display: inline-block !important; width: 8.33333% !important; } td.small-2, th.small-2 { display: inline-block !important; width: 16.66667% !important; } td.small-3, th.small-3 { display: inline-block !important; width: 25% !important; } td.small-4, th.small-4 { display: inline-block !important; width: 33.33333% !important; } td.small-5, th.small-5 { display: inline-block !important; width: 41.66667% !important; } td.small-6, th.small-6 { display: inline-block !important; width: 50% !important; } td.small-7, th.small-7 { display: inline-block !important; width: 58.33333% !important; } td.small-8, th.small-8 { display: inline-block !important; width: 66.66667% !important; } td.small-9, th.small-9 { display: inline-block !important; width: 75% !important; } td.small-10, th.small-10 { display: inline-block !important; width: 83.33333% !important; } td.small-11, th.small-11 { display: inline-block !important; width: 91.66667% !important; } td.small-12, th.small-12 { display: inline-block !important; width: 100% !important; } .column td.small-12, .column th.small-12, .columns td.small-12, .columns th.small-12 { display: block !important; width: 100% !important; } table.body td.small-offset-1, table.body th.small-offset-1 { margin-left: 8.33333% !important; margin-left: 8.33333% !important; } table.body td.small-offset-2, table.body th.small-offset-2 { margin-left: 16.66667% !important; margin-left: 16.66667% !important; } table.body td.small-offset-3, table.body th.small-offset-3 { margin-left: 25% !important; margin-left: 25% !important; } table.body td.small-offset-4, table.body th.small-offset-4 { margin-left: 33.33333% !important; margin-left: 33.33333% !important; } table.body td.small-offset-5, table.body th.small-offset-5 { margin-left: 41.66667% !important; margin-left: 41.66667% !important; } table.body td.small-offset-6, table.body th.small-offset-6 { margin-left: 50% !important; margin-left: 50% !important; } table.body td.small-offset-7, table.body th.small-offset-7 { margin-left: 58.33333% !important; margin-left: 58.33333% !important; } table.body td.small-offset-8, table.body th.small-offset-8 { margin-left: 66.66667% !important; margin-left: 66.66667% !important; } table.body td.small-offset-9, table.body th.small-offset-9 { margin-left: 75% !important; margin-left: 75% !important; } table.body td.small-offset-10, table.body th.small-offset-10 { margin-left: 83.33333% !important; margin-left: 83.33333% !important; } table.body td.small-offset-11, table.body th.small-offset-11 { margin-left: 91.66667% !important; margin-left: 91.66667% !important; } table.body table.columns td.expander, table.body table.columns th.expander { display: none !important; } table.body .right-text-pad, table.body .text-pad-right { padding-left: 10px !important; } table.body .left-text-pad, table.body .text-pad-left { padding-right: 10px !important; } table.menu { width: 100% !important; } table.menu td, table.menu th { width: auto !important; display: inline-block !important; } table.menu.small-vertical td, table.menu.small-vertical th, table.menu.vertical td, table.menu.vertical th { display: block !important; } table.menu[align="center"] { width: auto !important; } table.button.small-expand, table.button.small-expanded { width: 100% !important; } table.button.small-expand table, table.button.small-expanded table { width: 100%; } table.button.small-expand table a, table.button.small-expanded table a { text-align: center !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important; } table.button.small-expand center, table.button.small-expanded center { min-width: 0; } } </style> <table class="body" data-made-with-foundation="" style=" margin: 0; background: #f3f3f3; border-collapse: collapse; border-spacing: 0; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; height: 100%; line-height: 1.3; margin: 0; padding: 0; text-align: left; vertical-align: top; width: 100%; " > <tbody> <tr style="padding: 0; text-align: left; vertical-align: top"> <td class="float-center" align="center" valign="top" style=" -moz-hyphens: auto; -webkit-hyphens: auto; margin: 0 auto; border-collapse: collapse !important; color: #fff !important; float: none; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; hyphens: auto; line-height: 1.3; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; word-wrap: break-word; " > <center data-parsed="" style="min-width: 580px; width: 100%"> <table align="center" class="container float-center" style=" margin: 0 auto; background: #2d2d2d; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: 580px; " > <tbody> <tr style="padding: 0; text-align: left; vertical-align: top"> <td style=" -moz-hyphens: auto; -webkit-hyphens: auto; margin: 0; border-collapse: collapse !important; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; hyphens: auto; line-height: 1.3; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word; " > <table class="spacer" style=" border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%; " > <tbody> <tr style=" padding: 0; text-align: left; vertical-align: top; " > <td height="16px" style=" -moz-hyphens: auto; -webkit-hyphens: auto; margin: 0; border-collapse: collapse !important; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; hyphens: auto; line-height: 16px; margin: 0; mso-line-height-rule: exactly; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word; " > <table class="row" style=" border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%; " > <tbody> <tr style=" padding: 0; text-align: left; vertical-align: top; " > <td class="small-4 large-4 columns first last" style=" -moz-hyphens: auto; -webkit-hyphens: auto; margin: 0 auto; background-color: #d10232; border-collapse: collapse !important; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; hyphens: auto; line-height: 1.3; margin: 0 auto; mso-line-height-rule: exactly; padding: 0; padding-bottom: 5px; padding-left: 16px; padding-right: 16px; text-align: left; vertical-align: top; width: 177.33px; word-wrap: break-word; " ></td> <td class="small-4 large-4 columns first last" style=" -moz-hyphens: auto; -webkit-hyphens: auto; margin: 0 auto; background-color: #e73030; border-collapse: collapse !important; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; hyphens: auto; line-height: 1.3; margin: 0 auto; mso-line-height-rule: exactly; padding: 0; padding-bottom: 5px; padding-left: 16px; padding-right: 16px; text-align: left; vertical-align: top; width: 177.33px; word-wrap: break-word; " ></td> <td class="small-4 large-4 columns first last" style=" -moz-hyphens: auto; -webkit-hyphens: auto; margin: 0 auto; background-color: #e95d5d; border-collapse: collapse !important; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; hyphens: auto; line-height: 1.3; margin: 0 auto; mso-line-height-rule: exactly; padding: 0; padding-bottom: 5px; padding-left: 16px; padding-right: 16px; text-align: left; vertical-align: top; width: 177.33px; word-wrap: break-word; " ></td> </tr> </tbody> </table> <br /> </td> </tr> </tbody> </table> <table class="row" style=" border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%; " > <tbody> <tr style=" padding: 0; text-align: left; vertical-align: top; " > <th class="small-12 large-12 columns first last p-30" style=" margin: 0 auto; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.3; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 30px; padding-right: 30px; text-align: left; width: 564px; " > <table style=" border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%; " > <tbody> <tr style=" padding: 0; text-align: left; vertical-align: top; " > <th style=" margin: 0; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.3; margin: 0; padding: 0; text-align: left; " > <img src="http://placehold.it/200x50" alt="" style=" -ms-interpolation-mode: bicubic; clear: both; display: block; max-width: 100%; outline: 0; text-decoration: none; width: auto; " /> </th> <th class="expander" style=" margin: 0; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.3; margin: 0; padding: 0 !important; text-align: left; visibility: hidden; width: 0; " ></th> </tr> </tbody> </table> </th> </tr> </tbody> </table> <img src="http://placehold.it/600x300" alt="" style=" -ms-interpolation-mode: bicubic; clear: both; display: block; max-width: 100%; outline: 0; text-decoration: none; width: auto; " /> <table class="row" style=" border-collapse: collapse; border-spacing: 0; display: table; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%; " > <tbody> <tr style=" padding: 0; text-align: left; vertical-align: top; " > <th class="small-12 large-12 columns first last p-30" style=" margin: 0 auto; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.3; margin: 0 auto; padding: 0; padding-bottom: 16px; padding-left: 30px; padding-right: 30px; text-align: left; width: 564px; " > <table style=" border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; width: 100%; " > <tbody> <tr style=" padding: 0; text-align: left; vertical-align: top; " > <th style=" margin: 0; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.3; margin: 0; padding: 0; text-align: left; " > <br /> <h2 style=" margin: 0; margin-bottom: 10px; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 30px; font-weight: 400; line-height: 1.3; margin: 0; margin-bottom: 10px; padding: 0; text-align: left; word-wrap: normal; " > Error al iniciar el servicio <small style="color: #cacaca; font-size: 80%" >.</small > </h2> <p style=" margin: 0; margin-bottom: 10px; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 10pt; font-weight: 400; line-height: 1.3; margin: 0; margin-bottom: 10px; padding: 0; text-align: left; " > Hubo un problema con con el servicio de correo. </p> <p style=" font-weight: bold;">NO HAY INTERNET</p> <div class="button-app"> <a href="#" style=" margin: 0; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-weight: 400; line-height: 1.3; margin: 0; padding: 0; text-align: left; text-decoration: none; " ><img src="https://static.vecteezy.com/system/resources/thumbnails/006/916/560/small/no-internet-connection-icon-wifi-off-with-exclamation-mark-symbol-vector.jpg" height="80" style=" -ms-interpolation-mode: bicubic; border-radius: 40px; border: none; clear: both; display: inline; height: 80px; max-width: 100%; outline: 0; text-decoration: none; width: auto; " /></a> </div> <table class="button large secondary" style=" margin: 0 0 16px 0; background: #2d2d2d; border-collapse: collapse; border-spacing: 0; margin: 0 0 16px 0; padding: 0; text-align: left; vertical-align: top; width: auto; " > <tbody> <tr style=" padding: 0; text-align: left; vertical-align: top; " > <td style=" -moz-hyphens: auto; -webkit-hyphens: auto; margin: 0; border-collapse: collapse !important; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; hyphens: auto; line-height: 1.3; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word; " > </th> </tr> </tbody> </table> </td> </tr> </tbody> </table> <center data-parsed="" style="min-width: 580px; width: 100%" > <table align="center" class="menu float-center" style=" margin: 0 auto; border-collapse: collapse; border-spacing: 0; float: none; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; width: auto !important; " > <tbody> <tr style=" padding: 0; text-align: left; vertical-align: top; " > <td style=" -moz-hyphens: auto; -webkit-hyphens: auto; margin: 0; border-collapse: collapse !important; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; hyphens: auto; line-height: 1.3; margin: 0; padding: 0; text-align: left; vertical-align: top; word-wrap: break-word; " > <table style=" border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top; " > <tbody> <tr style=" padding: 0; text-align: left; vertical-align: top; " > <th class="menu-item float-center" style=" margin: 0 auto; color: #fff !important; float: none; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.3; margin: 0 auto; padding: 10px; padding-right: 10px; text-align: center; " > <a href="#" style=" margin: 0; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-weight: 400; line-height: 1.3; margin: 0; padding: 0; text-align: left; text-decoration: none; " >Terms</a > </th> <th class="menu-item float-center" style=" margin: 0 auto; color: #fff !important; float: none; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.3; margin: 0 auto; padding: 10px; padding-right: 10px; text-align: center; " > <a href="#" style=" margin: 0; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-weight: 400; line-height: 1.3; margin: 0; padding: 0; text-align: left; text-decoration: none; " >Privacy</a > </th> <th class="menu-item float-center" style=" margin: 0 auto; color: #fff !important; float: none; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 1.3; margin: 0 auto; padding: 10px; padding-right: 10px; text-align: center; " > <a href="#" style=" margin: 0; color: #fff !important; font-family: 'Gotham Book', Helvetica, Arial, sans-serif; font-weight: 400; line-height: 1.3; margin: 0; padding: 0; text-align: left; text-decoration: none; " >Unsubscribe</a > </th> </tr> </tbody> </table> </td> </tr> </tbody> </table> </center> </td> </tr> </tbody> </table> </center> </td> </tr> </tbody> </table> </body> </html>""")
+    dict = {}
+    
+    for email in recipient_list:
+        print("Enviando el correo a los destinatarios")
+
         try:
-            datetime.date.fromisoformat(date_text)
-        except ValueError:
-            raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+
+            request = requests.post(
+                f'https://api.mailgun.net/v3/{os.getenv("DOMAIN_NAME")}/messages',
+                auth=("api", f'{os.getenv("API_SECRET_KEY")}'),
+                # files = [("test.png", open("files/test.png", "rb", ).read())],
+                data={"from": "Esleyder Ordoñez <info@info.linadagua.online>",
+                    "to": email,
+                    "subject": "Error en la aplicación de correos",
+                    "html": t.render(dict)})
+
+            status = request.status_code
+            if (status == 200 or status == 201 or status == 202):
+                print("Correo enviado a: ", email)
+            else:
+                print("Hubo un error al enviar el correo")
+            errorApi = False
+        except:
+            print("Error al enviar el correo")
+            errorApi = True
 
 def read_documents():
 
-    archivo_excel = pd.read_excel('docs/cronograma1.xlsx')
-    format = "%d-%m-%Y"
-    columnas = ['fecha','nombre','correo','motivo']
-    df_seleccionados = archivo_excel[columnas]
-    print("Obteniendo información de los cronogramas xlsx")
-    rows = []
-    for data in df_seleccionados:
-        row = ''.join(map(str, archivo_excel[data].values))
- 
-        rows.append(row)  
+    path = os.getcwd()
+    files = os.listdir(path+'/docs')
+    if len(files) > 0:
+        for file in files:
 
-    rowDate = rows[0]
-    if(rowDate != ""):
-        fecha = pd.Timestamp(rowDate).date()
+            archivo_excel = pd.read_excel(f'docs/{file}')
+            format = "%d-%m-%Y"
+            columnas = ['fecha','nombre','correo','motivo']
+            df_seleccionados = archivo_excel[columnas]
+            print("Obteniendo información de los cronogramas xlsx")
+            rows = []
+            for data in df_seleccionados:
+                row = ''.join(map(str, archivo_excel[data].values))
+        
+                rows.append(row)  
 
-        today = datetime.date.today()
-        diff = fecha - today
-        remainingDays = diff.days
-        if(remainingDays == 8 or remainingDays == 7):
-            print(f"faltan {remainingDays} días, se enviará el correo")
-            
-            rows[0] = fecha.strftime("%m/%d/%Y")
-            
-            data = {
-                "fecha": rows[0],
-                "nombre": rows[1].capitalize(),
-                "correo": rows[2],
-                "motivo": rows[3]
-            }
- 
-            send_email(data)
-        else:
-            print("hoy no se enviará un correo")
+            rowDate = rows[0]
+            if(rowDate != ""):
+                fecha = pd.Timestamp(rowDate).date()
+
+                today = datetime.date.today()
+                diff = fecha - today
+                remainingDays = diff.days
+                if(remainingDays == 8 or remainingDays == 7):
+                    print(f"faltan {remainingDays} días, se enviará el correo")
+                    
+                    rows[0] = fecha.strftime("%m/%d/%Y")
+                    
+                    data = {
+                        "fecha": rows[0],
+                        "nombre": rows[1].capitalize(),
+                        "correo": rows[2],
+                        "motivo": rows[3]
+                    }
+        
+                    send_email(data)
+                else:
+                    print("hoy no se enviará un correo")
 
 def main():
 
     print("Iniciando...")
 
-    scheduledTime = "09:45:00"
+    scheduledTime = "15:49:00"
 
     schedule.every().day.at(scheduledTime).do(read_documents)
+
+    if(errorApi):
+        read_documents()
+        send_email_error()
 
     print("Hora programada: ",scheduledTime)
     currentTime = time.strftime("%H:%M:%S",time.localtime())
@@ -114,18 +150,19 @@ def main():
     if(currentTime <= scheduledTime):
         print("El servicio se ejecutará a las:", scheduledTime)
 
-    
-
 
 while True:
-        
-        if(connect()):
-            print("Hay internet")
-            main()
-            schedule.run_pending()
-        else:
-            print("No hay internet")    
-        time.sleep(60)	 	
+    
+    if(connect()):
+        print("Hay internet")
+        main()
+        schedule.run_pending()
+    else:
+        print("No hay internet") 
+          
+    time.sleep(60)	 	 
+
+ 
 
 
 
