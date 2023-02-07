@@ -8,10 +8,11 @@ from jinja2 import Template
 import schedule
 import time
 import urllib.request
+import openpyxl
 
 load_dotenv()
 
-errorApi = False
+
 
 def connect(host='http://google.com'):
     try:
@@ -33,7 +34,7 @@ def getTime():
 
     return msgTime
 
-def send_email(data):
+def send_email(archivo_excel, file, data):
 
     recipient_list = [data["correo"]]
 
@@ -54,10 +55,18 @@ def send_email(data):
                   "html": t.render(dict)})
 
         status = request.status_code
+        
         if (status == 200 or status == 201 or status == 202):
             print("Correo enviado a: ", email)
+            
+            archivo_excel['estado'] = 'enviado'
+            
         else:
             print("Hubo un error al enviar el correo")
+            archivo_excel['estado'] = 'no_enviado'
+
+        with pd.ExcelWriter(f'docs/{file}',mode='a', if_sheet_exists="replace") as writer:
+            archivo_excel.to_excel(writer, sheet_name='Eventos', index=False)   
 
 def send_email_error():
 
@@ -83,8 +92,10 @@ def send_email_error():
             status = request.status_code
             if (status == 200 or status == 201 or status == 202):
                 print("Correo enviado a: ", email)
+                
             else:
                 print("Hubo un error al enviar el correo")
+               
             errorApi = False
         except:
             print("Error al enviar el correo")
@@ -101,7 +112,7 @@ def read_documents():
             format = "%d-%m-%Y"
             columnas = ['fecha','nombre','correo','motivo']
             df_seleccionados = archivo_excel[columnas]
-            print("Obteniendo información de los cronogramas xlsx")
+            print("Leyendo excel: ", file)
             rows = []
             for data in df_seleccionados:
                 row = ''.join(map(str, archivo_excel[data].values))
@@ -115,6 +126,7 @@ def read_documents():
                 today = datetime.date.today()
                 diff = fecha - today
                 remainingDays = diff.days
+                print("Dias faltantes: ", remainingDays)
                 if(remainingDays == 8 or remainingDays == 7):
                     print(f"faltan {remainingDays} días, se enviará el correo")
                     
@@ -127,21 +139,14 @@ def read_documents():
                         "motivo": rows[3]
                     }
         
-                    send_email(data)
+                    send_email(archivo_excel, file, data)
                 else:
                     print("hoy no se enviará un correo")
 
 def main():
-
-    print("Iniciando...")
-
-    scheduledTime = "15:49:00"
-
+    errorApi = False
+    scheduledTime = "23:26:00"
     schedule.every().day.at(scheduledTime).do(read_documents)
-
-    if(errorApi):
-        read_documents()
-        send_email_error()
 
     print("Hora programada: ",scheduledTime)
     currentTime = time.strftime("%H:%M:%S",time.localtime())
@@ -152,9 +157,8 @@ def main():
 
 
 while True:
-    
+
     if(connect()):
-        print("Hay internet")
         main()
         schedule.run_pending()
     else:
