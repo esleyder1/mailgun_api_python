@@ -110,7 +110,7 @@ def read_documents():
 
             archivo_excel = pd.read_excel(f'docs/{file}')
             format = "%d-%m-%Y"
-            columnas = ['fecha','nombre','correo','motivo']
+            columnas = ['fecha','nombre','correo','motivo', 'estado']
             df_seleccionados = archivo_excel[columnas]
             print("Leyendo excel: ", file)
             rows = []
@@ -119,33 +119,36 @@ def read_documents():
         
                 rows.append(row)  
 
-            rowDate = rows[0]
-            if(rowDate != ""):
-                fecha = pd.Timestamp(rowDate).date()
+            if(not rows[4] or rows[4] == "no_enviado"):
+                print("NO ENVIADO, SE ENVIARÁ")
+                
+                rowDate = rows[0]
+                if(rowDate != ""):
+                    fecha = pd.Timestamp(rowDate).date()
 
-                today = datetime.date.today()
-                diff = fecha - today
-                remainingDays = diff.days
-                print("Dias faltantes: ", remainingDays)
-                if(remainingDays == 8 or remainingDays == 7):
-                    print(f"faltan {remainingDays} días, se enviará el correo")
-                    
-                    rows[0] = fecha.strftime("%m/%d/%Y")
-                    
-                    data = {
-                        "fecha": rows[0],
-                        "nombre": rows[1].capitalize(),
-                        "correo": rows[2],
-                        "motivo": rows[3]
-                    }
-        
-                    send_email(archivo_excel, file, data)
-                else:
-                    print("hoy no se enviará un correo")
+                    today = datetime.date.today()
+                    diff = fecha - today
+                    remainingDays = diff.days
+                    print("Dias faltantes: ", remainingDays)
+                    if(remainingDays == 8 or remainingDays == 7):
+                        print(f"faltan {remainingDays} días, se enviará el correo")
+                        
+                        rows[0] = fecha.strftime("%m/%d/%Y")
+                        
+                        data = {
+                            "fecha": rows[0],
+                            "nombre": rows[1].capitalize(),
+                            "correo": rows[2],
+                            "motivo": rows[3]
+                        }
+            
+                        send_email(archivo_excel, file, data)
+                    else:
+                        print("hoy no se enviará un correo")
 
 def main():
-    errorApi = False
-    scheduledTime = "23:26:00"
+    read_documents()
+    scheduledTime = "12:08:00"
     schedule.every().day.at(scheduledTime).do(read_documents)
 
     print("Hora programada: ",scheduledTime)
